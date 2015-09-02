@@ -18,6 +18,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/ecs"
 	"github.com/aws/aws-sdk-go/service/efs"
 	"github.com/aws/aws-sdk-go/service/elasticache"
+	"github.com/aws/aws-sdk-go/service/elasticbeanstalk"
 	"github.com/aws/aws-sdk-go/service/elb"
 	"github.com/aws/aws-sdk-go/service/iam"
 	"github.com/aws/aws-sdk-go/service/kinesis"
@@ -43,24 +44,25 @@ type Config struct {
 }
 
 type AWSClient struct {
-	cloudwatchconn     *cloudwatch.CloudWatch
-	cloudwatchlogsconn *cloudwatchlogs.CloudWatchLogs
-	dynamodbconn       *dynamodb.DynamoDB
-	ec2conn            *ec2.EC2
-	ecsconn            *ecs.ECS
-	efsconn            *efs.EFS
-	elbconn            *elb.ELB
-	autoscalingconn    *autoscaling.AutoScaling
-	s3conn             *s3.S3
-	sqsconn            *sqs.SQS
-	snsconn            *sns.SNS
-	r53conn            *route53.Route53
-	region             string
-	rdsconn            *rds.RDS
-	iamconn            *iam.IAM
-	kinesisconn        *kinesis.Kinesis
-	elasticacheconn    *elasticache.ElastiCache
-	lambdaconn         *lambda.Lambda
+	cloudwatchconn       *cloudwatch.CloudWatch
+	cloudwatchlogsconn   *cloudwatchlogs.CloudWatchLogs
+	dynamodbconn         *dynamodb.DynamoDB
+	ec2conn              *ec2.EC2
+	ecsconn              *ecs.ECS
+	efsconn              *efs.EFS
+	elbconn              *elb.ELB
+	autoscalingconn      *autoscaling.AutoScaling
+	s3conn               *s3.S3
+	sqsconn              *sqs.SQS
+	snsconn              *sns.SNS
+	r53conn              *route53.Route53
+	region               string
+	rdsconn              *rds.RDS
+	iamconn              *iam.IAM
+	kinesisconn          *kinesis.Kinesis
+	elasticacheconn      *elasticache.ElastiCache
+	elasticbeanstalkconn *elasticbeanstalk.ElasticBeanstalk
+	lambdaconn           *lambda.Lambda
 }
 
 // Client configures and returns a fully initialized AWSClient
@@ -127,6 +129,9 @@ func (c *Config) Client() (interface{}, error) {
 
 		log.Println("[INFO] Initializing Kinesis Connection")
 		client.kinesisconn = kinesis.New(awsConfig)
+
+		log.Println("[INFO] Initializing Elastic Beanstalk Connection")
+		client.elasticbeanstalkconn = elasticbeanstalk.New(awsConfig)
 
 		authErr := c.ValidateAccountId(client.iamconn)
 		if authErr != nil {
