@@ -63,7 +63,7 @@ type AWSClient struct {
 	kinesisconn        *kinesis.Kinesis
 	elasticacheconn    *elasticache.ElastiCache
 	lambdaconn         *lambda.Lambda
-	glacierconn        *glacier.Glacier
+	opsworksconn       *opsworks.OpsWorks
 }
 
 // Client configures and returns a fully initialized AWSClient
